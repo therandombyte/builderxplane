@@ -1,0 +1,9 @@
+apiVersion: apiextensions.xplane.io/v1
+kind: Composition
+metadata:
+  labels:
+    app.kubernetes.io/name: builderxplane
+    app.kubernetes.io/managed-by: kustomize
+  name: composition-sample
+spec:
+  # TODO(user): Add fields here

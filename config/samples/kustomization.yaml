@@ -1,0 +1,5 @@
+## Append samples of your project ##
+resources:
+- apiextensions_v1_composition.yaml
+- apiextensions_v1_compositionrevision.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples
