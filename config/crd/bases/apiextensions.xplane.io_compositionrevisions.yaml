@@ -51,6 +51,15 @@ spec:
                 - apiVersion
                 - kind
                 type: object
+              mode:
+                description: A CompositionMode determines what mode of Composition
+                  is used.
+                type: string
+              revision:
+                format: int64
+                type: integer
+            required:
+            - revision
             type: object
           status:
             type: object

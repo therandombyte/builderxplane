@@ -4,8 +4,21 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+const (
+	// LabelCompositionName is the name of the Composition used to create
+	// this CompositionRevision.
+	LabelCompositionName = "xpane.io/composition-name"
+
+	// LabelCompositionHash is a hash of the Composition label, annotation
+	// and spec used to create this CompositionRevision. Used to identify
+	// identical revisions.
+	LabelCompositionHash = "xplane.io/composition-hash"
+)
+
 type CompositionRevisionSpec struct {
-	CompositeTypeRef TypeReference `json:"compositeTypeRef,omitempty"`
+	CompositeTypeRef TypeReference    `json:"compositeTypeRef,omitempty"`
+	Mode             *CompositionMode `json:"mode,omitempty"`
+	Revision         int64            `json:"revision"`
 }
 
 type CompositionRevisionStatus struct {

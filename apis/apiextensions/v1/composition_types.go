@@ -7,7 +7,8 @@ import (
 )
 
 type CompositionSpec struct {
-	CompositeTypeRef TypeReference `json:"compositeTypeRef,omitempty"`
+	CompositeTypeRef TypeReference    `json:"compositeTypeRef,omitempty"`
+	Mode             *CompositionMode `json:"mode,omitempty"`
 }
 
 // +kubebuilder:object:root=true

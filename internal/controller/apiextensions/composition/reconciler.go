@@ -4,8 +4,8 @@ package composition
 
 import (
 	"context"
-	"fmt"
 	"strings"
+	"time"
 
 	v1 "github.com/therandombyte/builderxplane/apis/apiextensions/v1"
 	"github.com/therandombyte/builderxplane/internal/controller/apiextensions/controller"
@@ -43,11 +43,41 @@ type Reconciler struct {
 // ReconcilerOption is used to configure the Reconciler.
 type ReconcilerOption func(*Reconciler)
 
+const (
+	timeout = 2 * time.Minute
+)
+
+// Error strings.
+const (
+	errGet             = "cannot get Composition"
+	errListRevs        = "cannot list CompositionRevisions"
+	errCreateRev       = "cannot create CompositionRevision"
+	errOwnRev          = "cannot own CompositionRevision"
+	errUpdateRevStatus = "cannot update CompositionRevision status"
+	errUpdateRevSpec   = "cannot update CompositionRevision spec"
+)
+
+// Reconciliation logic
 func (r *Reconciler) Reconcile(ctx context.Context, req reconcile.Request) (reconcile.Result, error) {
 	log := r.log.WithValues("request", req)
-	log.Debug("Reconciling via Debug")
-	fmt.Println("Reconciling via Println")
+	log.Info("Reconciling via Debug")
 
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	comp := &v1.Composition{}
+	if err := r.client.Get(ctx, req.NamespacedName, comp); err != nil {
+		log.Info(errGet, "error", err)
+		return reconcile.Result{}, nil
+	}
+
+	var latestRev int64
+
+	if err := r.client.Create(ctx, NewCompositionRevision(comp, latestRev+1)); err != nil {
+		log.Info(errCreateRev, "error", err)
+		return reconcile.Result{}, nil
+	}
+	log.Info("Created new revision", "revision", latestRev+1)
 	return reconcile.Result{}, nil
 }
 

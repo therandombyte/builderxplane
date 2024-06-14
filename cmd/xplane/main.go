@@ -24,6 +24,12 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
+/*
+TODO: RBAC Command
+	Dev mode logger
+	Version Flag
+*/
+
 // -------------- Picked up from Kubebuilder -------------
 var (
 	scheme = runtime.NewScheme()
@@ -51,6 +57,17 @@ type cli struct {
 	Version versionFlag `help:"Print version and quit" short:"v"`
 
 	Core core.Command `cmd:"" default:"withargs" help:"Start core xplane contollers"`
+}
+
+// Bind the dev mode logger to kong context when debugflag is passed
+// Requires unparam lint exception as knog expects error from Hook methods
+// but we are not seding any
+func (d debugFlag) BeforeApply(ctx *kong.Context) error { //nolint:unparam
+	z1 := zap.New(zap.UseDevMode(true)).WithName("xplane")
+	ctx.BindTo(logging.NewLogrLogger(z1), (*logging.Logger)(nil)) // read about reflection from Rob Pike
+	ctrl.SetLogger(z1)
+	logging.SetFilteredKlogLogger(z1)
+	return nil
 }
 
 func main() {
@@ -86,10 +103,6 @@ func main() {
 	ctx.FatalIfErrorf(apis.AddToScheme(s), "cannot add Crossplane API types to scheme")
 	ctx.FatalIfErrorf(ctx.Run(s))
 }
-
-
-
-
 
 /*
 Copyright 2024.
