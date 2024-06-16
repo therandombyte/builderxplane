@@ -12,7 +12,19 @@ type CompositionSpec struct {
 }
 
 // +kubebuilder:object:root=true
-// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
+// +genclient
+// +genclient:nonNamespaced
+
+// A Composition defines a collection of managed resources or functions that
+// Crossplane uses to create and manage new composite resources.
+//
+// Read the Crossplane documentation for
+// [more information about Compositions](https://docs.crossplane.io/latest/concepts/compositions).
+// +kubebuilder:printcolumn:name="XR-KIND",type="string",JSONPath=".spec.compositeTypeRef.kind"
+// +kubebuilder:printcolumn:name="XR-APIVERSION",type="string",JSONPath=".spec.compositeTypeRef.apiVersion"
+// +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
+// +kubebuilder:resource:scope=Cluster,categories=crossplane,shortName=comp
 
 type Composition struct {
 	metav1.TypeMeta   `json:",inline"`

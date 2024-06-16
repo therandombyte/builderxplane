@@ -8,13 +8,30 @@ metadata:
 spec:
   group: apiextensions.xplane.io
   names:
+    categories:
+    - crossplane
     kind: CompositionRevision
     listKind: CompositionRevisionList
     plural: compositionrevisions
+    shortNames:
+    - comprev
     singular: compositionrevision
-  scope: Namespaced
+  scope: Cluster
   versions:
-  - name: v1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.revision
+      name: REVISION
+      type: string
+    - jsonPath: .spec.compositeTypeRef.kind
+      name: XR-KIND
+      type: string
+    - jsonPath: .spec.compositeTypeRef.apiVersion
+      name: XR-APIVERSION
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1
     schema:
       openAPIV3Schema:
         properties:
@@ -52,8 +69,9 @@ spec:
                 - kind
                 type: object
               mode:
-                description: A CompositionMode determines what mode of Composition
-                  is used.
+                description: |-
+                  A CompositionMode determines what mode of Composition is used.
+                  shouldnt it be like an enum with pre-determined values?
                 type: string
               revision:
                 format: int64

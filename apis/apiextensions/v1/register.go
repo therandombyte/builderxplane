@@ -25,8 +25,8 @@ var (
 
 // Composition type metadata
 var (
-	CompositionKind            = reflect.TypeOf(Composition{}).Name()
-	CompositionGroupKind       = schema.GroupKind{Group: Group, Kind: CompositionKind}.String()
-	CompositionKindAPIVersion  = CompositionKind + "." + SchemeGroupVersion.String()
-	CompostionGroupVersionKind = SchemeGroupVersion.WithKind(CompositionKind)
+	CompositionKind             = reflect.TypeOf(Composition{}).Name()
+	CompositionGroupKind        = schema.GroupKind{Group: Group, Kind: CompositionKind}.String()
+	CompositionKindAPIVersion   = CompositionKind + "." + SchemeGroupVersion.String()
+	CompositionGroupVersionKind = SchemeGroupVersion.WithKind(CompositionKind)
 )
